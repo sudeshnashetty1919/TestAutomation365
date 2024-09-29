@@ -1,0 +1,52 @@
+pool:
+  VmImage : "windows-latest"
+
+variables:
+  - name : FB_URL
+    value : 'https://dynamics365accelerator-${{parameters.environment}}.sandox.operations.com/'
+
+parameters:   
+   - name : environment
+     displayName : Environment
+     type : string
+     default : Test
+     values :
+        - Test
+        - PRE
+stages:
+  - stage : BranchAndSales
+    condition : and(in(variables['Build.Reason'], 'Manual', 'Schedule'), succeededOrFailed())
+    displayName : Branch and Sales
+    jobs :
+      - jobs: runTests
+        displayName : load test runner
+      - template : testRunner.yml
+        parameters : 
+          environment : ${{ parameters.environment }} 
+          filter : 'TestCategory~Hyderabad'
+          reportName : Branch_and_Sales
+
+   - stage : Registration
+    condition : and(in(variables['Build.Reason'], 'Manual', 'Schedule'), succeededOrFailed())
+    displayName : Registration Page
+    jobs :
+      - jobs: runTests
+        displayName : load test runner
+      - template : testRunner.yml
+        parameters : 
+          environment : ${{ parameters.environment }} 
+          filter : 'TestCategory~Hyderabad'
+          reportName : Registration_RM_CM
+
+    - stage : Login
+    condition : and(in(variables['Build.Reason'], 'Manual', 'Schedule'), succeededOrFailed())
+    displayName : Login Page
+    jobs :
+      - jobs: runTests
+        displayName : load test runner
+      - template : testRunner.yml
+        parameters : 
+          environment : ${{ parameters.environment }} 
+          filter : 'TestCategory~Hyderabad'
+          reportName : Login_WM               
+      

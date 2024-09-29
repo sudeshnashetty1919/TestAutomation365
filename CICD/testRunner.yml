@@ -1,0 +1,128 @@
+parameters:   
+ -  name : environment
+    displayName : Environment
+    type : string
+    default : Test
+    values :
+      - Test
+      - PRE
+
+ -  name : filter
+    displayName : Test Filter
+    type : string
+    default : 'TestCategory="Test"'
+
+ -  name : reportName   
+    type : string
+    default : index
+
+jobs :
+  - jobs: run
+    displayName : execute ${{parameters.reportName}}
+    dependsOn : []  
+  
+  steps : 
+    - task : NuGetToolInstaller@1
+    
+    - task: NuGetCommand@2
+      inputs :
+        restoreSolution : '$(solution)' 
+
+    - task: powerShell@2
+       displayName : Set resolution to 1920 1080
+       inputs :
+        targetType : 'inline'
+        script : 'Set-DisplayResolution -Width 1920 -Weight 1080 -Force'
+
+    - task: cmdLine@2
+       displayName : Run Tests (Filtered)
+       env :
+        FB_KEY : $(FB_KEY)
+       inputs:  
+        script : 'dotnet test --filter ${{ parameters.filter }} --logger:junit'             
+   
+    - task: powerShell@2
+       displayName : Create artifact folders
+       condition : succeededOrFailed()
+       inputs:  
+        targetType: 'inline'
+        script : |
+          New-Item  -ItemType Directory -Force -Path $(Build.ArtifactStagingDirectory)/PdfFiles
+          New-Item  -ItemType Directory -Force -Path $(Build.ArtifactStagingDirectory)/screenshots
+
+       ignoreLASTEXITCODE : true 
+   
+    - task: CopyFiles@2
+       displayName : Copy screenshots to artifact staging directory
+       condition : succeededOrFailed()
+       inputs:  
+        contents : $(System.DefaultWorkingDirectory)/bin/Debug/net6.0/*.png
+        targetFolder: $(Build.ArtifactStagingDirectory)/screenshots
+        flattenFolders : true 
+
+    - task: PublishBuildArtifacts@1
+       displayName : Publish the Screenshots
+       condition : succeededOrFailed()
+       inputs:  
+        PathToPublish: $(Build.ArtifactStagingDirectory)/screenshots
+        ArtifactName : 'Screenshots'
+        publishLocation : 'Container' 
+
+     - task: CopyFiles@2
+       displayName : Copy PDF files to artifact staging directory
+       condition : succeededOrFailed()
+       inputs:  
+        contents : $(System.DefaultWorkingDirectory)/bin/Debug/net6.0/*.pdf
+        targetFolder: $(Build.ArtifactStagingDirectory)/PdfFiles
+        flattenFolders : true 
+
+    - task: PublishBuildArtifacts@1
+       displayName : Publish the PDFs
+       condition : succeededOrFailed()
+       inputs:  
+        PathToPublish: $(Build.ArtifactStagingDirectory)/pdfFiles
+        ArtifactName : 'Pdf Files'
+        publishLocation : 'Container'                       
+    
+      - task: powerShell@2
+       displayName : Edit Screenshot paths
+       condition : succeededOrFailed()
+       inputs:  
+        targetType: 'inline'
+        script : |
+          $file = '$(System.DefaultWorkingDirectory)\bin\Debug\index.html'
+          $newFile = '$(System.DefaultWorkingDirectory)\bin\Debug\${{parameters.reportsName}}.html'
+          $raw = '$(System.DefaultWorkingDirectory)\bin\Debug\net6.0\'
+          $find = $raw.replace('\','\\')
+          $repl = 'https://dev.azure.com/dynamics365accelerator/_apis/resources/containers/${Build.ContainerId}/Screenshots?itemPath=Screenshots%2F'
+          $new = (Get-Content -Path $file) -replace $find, $repl
+          Set-Content #newFile -Value $new
+          $result = Get-Content $newFile
+          echo $result
+
+       errorActionPreference : 'continue' 
+
+     - task: CopyFiles@2
+       displayName : Copy Extent Report to artifact staging directory
+       condition : succeededOrFailed()
+       inputs:  
+        contents : $(System.DefaultWorkingDirectory)/bin/Debug/${{parameters.reportsName}}.html
+        targetFolder: $(Build.ArtifactStagingDirectory)/ExtentReports
+        flattenFolders : true 
+
+    - task: PublishBuildArtifacts@1
+       displayName : Publish the Extent Report
+       condition : succeededOrFailed()
+       inputs:  
+        PathToPublish: $(Build.ArtifactStagingDirectory)/ExtentReports
+        ArtifactName : 'Extent Reports'
+        publishLocation : 'Container' 
+        
+    - task: PublishTestResults@2
+       displayName : Publish Test Results
+       condition : succeededOrFailed()
+       inputs:  
+        testRunTitle: ${{parameters.reportsName}}
+        testResultFormat : 'Junit'
+        testResultFiles : '**/TestResults/*.xml'
+        mergeTesResults : true       

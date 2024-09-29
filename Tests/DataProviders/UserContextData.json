@@ -1,0 +1,38 @@
+[
+   {
+
+    "DisplayName" : "dynamics365accelerator user 1",
+    "PrincipalName" : "dynamics365accelerator@gmail.com",
+    "Role" : "dynamics365accelerator Hyderabad",
+    "CostCenter" : "13129",
+    "Warehouse" : "29C",
+    "EncryptedPassword" : "abcdefghijklmnopqrstuvwxyz"
+   },
+   {
+
+    "DisplayName" : "dynamics365accelerator user 2",
+    "PrincipalName" : "dynamics365accelerator@gmail.com",
+    "Role" : "dynamics365accelerator Secunderabad",
+    "CostCenter" : "13119",
+    "Warehouse" : "26H",
+    "EncryptedPassword" : "abcdefghijklmnopqrstuvwxyzab"
+   },
+   {
+
+    "DisplayName" : "dynamics365accelerator user 3",
+    "PrincipalName" : "dynamics365accelerator@gmail.com",
+    "Role" : "ToBeConfirmed",
+    "CostCenter" : "ToBeConfirmed",
+    "Warehouse" : "29C",
+    "EncryptedPassword" : ""
+   },
+   {
+
+    "DisplayName" : "dynamics365accelerator user 4",
+    "PrincipalName" : "dynamics365accelerator@gmail.com",
+    "Role" : "ToBeConfirmed",
+    "CostCenter" : "ToBeConfirmed",
+    "Warehouse" : "13C",
+    "EncryptedPassword" : ""
+   }
+]

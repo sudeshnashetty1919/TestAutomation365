@@ -1,0 +1,92 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <IsPackable>false</IsPackable>
+    <Nullable>enable</Nullable>
+    <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackagaeReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />
+    <PackagaeReference Include="NUnit" Version="3.13.3" />
+    <PackagaeReference Include="NUnit3TestAdapter" Version="4.2.1" />
+    <PackagaeReference Include="coverlet.collector" Version="3.1.2" />
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackagaeReference>
+    <PackagaeReference Include="JunitXml.TestLogger" Version="3.0.114" />
+    <PackagaeReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackagaeReference Include="RestSharp" Version="108.0.2" />
+    <PackagaeReference Include="Selenium.WebDriver" Version="4.5.1" />
+    <PackagaeReference Include="Selenium.Support" Version="4.5.1" />
+    <PackagaeReference Include="CsvHelper" Version="29.0.0" />
+    <PackagaeReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
+    <PackagaeReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="6.0.1" />
+    <PackagaeReference Include="WebDriverManager" Version="2.16.2" />
+    <PackagaeReference Include="XunitXml.TestLogger" Version="3.0.70" />
+    <PackagaeReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" />
+    <PackagaeReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0" />
+    <PackagaeReference Include="System.Runtime" Version="4.3.1" />
+    <PackagaeReference Include="System.Threading" Version="4.3.0" />
+    <PackagaeReference Include="System.Runtime.Extensions" Version="4.3.1" />
+    <PackagaeReference Include="System.Net.Http" Version="4.3.4" />
+    <PackagaeReference Include="System.Threading.Tasks" Version="4.3.0" />
+    <PackagaeReference Include="System.ObjectModel" Version="4.3.0" />
+    <PackagaeReference Include="System.Dynamic.Runtime" Version="4.3.0" />
+    <PackagaeReference Include="System.Console" Version="4.3.1" />
+    <PackagaeReference Include="Microsoft.NETCore.App" Version="2.2.8" />
+    <PackagaeReference Include="SeleniumExtras.WaitHelpers" Version="1.0.2" />
+    <PackagaeReference Include="ExtentReports" Version="4.1.0" />
+    
+   
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="JunitXml.TestLogger"/>
+    <None Remove="Newtonsoft.Json"/>
+    <None Remove="Selenium.WebDriver"/>
+    <None Remove="Selenium.Support"/>
+    <None Remove="CsvHelper"/>
+    <None Remove="Microsoft.Extensions.Configuration.Json"/>
+    <None Remove="Microsoft.Extensions.Configuration.EnvironmentVariables"/>
+    <None Remove="SpecFlow"/>
+    <None Remove="SpecFlow.NUnit"/>
+    <None Remove="SpecFlow.Tools.MsBuild.Generation"/>
+    <None Remove="XunitXml.TestLogger"/>
+    <None Remove="Support\"/>
+    <None Remove="Support\Driver\"/>
+    <None Remove="Model\Data\"/>
+    <None Remove="Model\Components\"/>
+    <None Remove="Model\Components\Menus\"/>
+    <None Remove="Model\Page\CustomerService\"/>
+    <None Remove="Model\Page\CustomerService\Accounts\"/>
+    <None Remove="Tests\DataProviders\"/>
+    <None Remove="Model\Components\Dialogs\"/>
+    <None Remove="Model\Page\CustomerService\Contacts\"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Model\Components\Dialogs\Contract management\Contract\All contracts and quotation\"/>
+    <Folder Include="Support\"/>
+    <Folder Include="Support\Driver\"/>
+    <Folder Include="Model\Components\Menus\"/>
+    <Folder Include="Model\Page\CustomerService\"/>
+    <Folder Include="Model\Page\CustomerService\Accounts\"/>
+    <Folder Include="Tests\DataProviders\"/>
+    <Folder Include="Model\Page\CustomerService\Contacts\"/>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="env.json" Condition="Exists('env.json')">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Tests\DataProviders\UsersContextData.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>
